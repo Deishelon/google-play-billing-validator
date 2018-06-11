@@ -85,6 +85,10 @@ verifier.verifySub(receipt, function cb(err, response) {
 });
 ```
 
+### Links
+[GitHub](https://github.com/Deishelon/google-play-billing-validator "GitHub")
+[npmjs](https://www.npmjs.com/package/google-play-billing-validator "npmjs")
+
 
 ### Credits
 [google-play-purchase-validator](https://www.npmjs.com/package/google-play-purchase-validator "google-play-purchase-validator") - Forked from here, at the moment of writing supported only Subscriptions, used old v2 google API schema. Moved to v3, Added In-App purchases
