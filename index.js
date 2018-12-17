@@ -68,7 +68,7 @@ Verifier.prototype.verify = function(finalUrl){
           resultInfo.errorMessage = errorMessage
 
           //console.log(resultInfo);
-          reject(Error(resultInfo));
+          reject(resultInfo);
         }
 
       }
