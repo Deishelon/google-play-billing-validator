@@ -38,7 +38,7 @@ var Verifier = require('google-play-billing-validator');
 ```javascript
 var options = {
   "email": 'INSERT SERVICE ACCOUNT EMAIL HERE',
-	"key": "INSERT YOUR PRIVATE KEY HERE",
+  "key": "INSERT YOUR PRIVATE KEY HERE",
 };
 ```
 
@@ -53,11 +53,11 @@ var verifier = new Verifier(options);
 ##### Create a receipt object
 
 ```javascript
-	let receipt = {
-  	packageName: "your app package name",
-  	productId: "sku / subscription id",
-  	purchaseToken: "purchase token"
-	};
+let receipt = {
+  packageName: "your app package name",
+  productId: "sku / subscription id",
+  purchaseToken: "purchase token"
+};
 ```
 
 ##### Validate In-app purchase
@@ -163,8 +163,8 @@ Purchases.products @ Google Documentation](https://developers.google.com/android
 
 ```javascript
 {
-	"isSuccessful": false,
-	"errorMessage": "The purchase token does not match the product ID."
+  "isSuccessful": false,
+  "errorMessage": "The purchase token does not match the product ID."
 }
 ```
 
@@ -182,8 +182,9 @@ v1 was a callback based, where v2 is fully promise based.
 If you are unfamiliar with promises, read [this](https://developers.google.com/web/fundamentals/primers/promises)
 
 The migration is very simple:
-1\. Remove the callback parameter to `verifyINAPP()` and/or `verifySub()` functions
-2\. See example usage (above)
+1. Remove the callback parameter to `verifyINAPP()` and/or `verifySub()` functions
+2. Get result in a `promise`
+3. See example usage (above)
 
 ### Links
 
