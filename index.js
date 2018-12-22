@@ -38,7 +38,13 @@ Verifier.prototype.verify = function(finalUrl){
 
       if (err) {
         // Google Auth Errors returns here
-        let errorMessage = err.body.error_description
+        let errBody = err.body
+        let errorMessage
+        if (errBody) {
+          errorMessage = err.body.error_description
+        }else {
+          errorMessage = err
+        }
         resultInfo.isSuccessful = false
         resultInfo.errorMessage = errorMessage
 
