@@ -21,6 +21,14 @@ Verifier.prototype.verifySub = function (receipt) {
   return this.verify(finalUrl)
 };
 
+function isValidJson(string) {
+  try {
+    JSON.parse(string);
+  } catch (e) {
+    return false;
+  }
+  return true;
+}
 
 Verifier.prototype.verify = function (finalUrl) {
   let options = {
@@ -50,14 +58,20 @@ Verifier.prototype.verify = function (finalUrl) {
 
         reject(resultInfo);
       } else {
-        let obj = JSON.parse(body);
 
-        let statusCode = res.statusCode;
-        //console.log("statusCode: " + statusCode);
+        let obj = {
+          "error": {
+            "code": 404,
+            "message": "Invalid response, please check 'Verifier' configuration"
+          }
+        };
+
+        if (isValidJson(body)) {
+          obj = JSON.parse(body);
+        }
 
         if (res.statusCode === 200) {
           // All Good
-          //console.log("All good!");
 
           resultInfo.isSuccessful = true;
           resultInfo.errorMessage = null;
@@ -73,7 +87,6 @@ Verifier.prototype.verify = function (finalUrl) {
           resultInfo.isSuccessful = false;
           resultInfo.errorMessage = errorMessage;
 
-          //console.log(resultInfo);
           reject(resultInfo);
         }
 
