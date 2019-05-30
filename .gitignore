@@ -80,3 +80,7 @@ typings/
 
 # Mac
 .DS_Store
+
+# IDEA
+.idea/
+google-play-billing-validator.iml
