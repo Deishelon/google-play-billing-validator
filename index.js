@@ -1,84 +1,84 @@
-var request = require('google-oauth-jwt').requestWithJWT();
-var util = require('util');
+const request = require('google-oauth-jwt').requestWithJWT();
+const util = require('util');
 
 module.exports = Verifier;
 
 function Verifier(options) {
-    this.options = options || {};
+  this.options = options || {};
 }
 
 Verifier.prototype.verifyINAPP = function (receipt) {
-    let urlPattern = "https://www.googleapis.com/androidpublisher/v3/applications/%s/purchases/products/%s/tokens/%s";
-    let finalUrl = util.format(urlPattern, encodeURIComponent(receipt.packageName), encodeURIComponent(receipt.productId), encodeURIComponent(receipt.purchaseToken));
+  let urlPattern = "https://www.googleapis.com/androidpublisher/v3/applications/%s/purchases/products/%s/tokens/%s";
+  let finalUrl = util.format(urlPattern, encodeURIComponent(receipt.packageName), encodeURIComponent(receipt.productId), encodeURIComponent(receipt.purchaseToken));
 
-    return this.verify(finalUrl)
+  return this.verify(finalUrl)
 };
 
 Verifier.prototype.verifySub = function (receipt) {
-    var urlPattern = "https://www.googleapis.com/androidpublisher/v3/applications/%s/purchases/subscriptions/%s/tokens/%s";
-    var finalUrl = util.format(urlPattern, encodeURIComponent(receipt.packageName), encodeURIComponent(receipt.productId), encodeURIComponent(receipt.purchaseToken));
+  let urlPattern = "https://www.googleapis.com/androidpublisher/v3/applications/%s/purchases/subscriptions/%s/tokens/%s";
+  let finalUrl = util.format(urlPattern, encodeURIComponent(receipt.packageName), encodeURIComponent(receipt.productId), encodeURIComponent(receipt.purchaseToken));
 
-    return this.verify(finalUrl)
+  return this.verify(finalUrl)
 };
 
 
 Verifier.prototype.verify = function (finalUrl) {
-    let options = {
-        uri: finalUrl,
-        jwt: {
-            email: this.options.email,
-            key: this.options.key,
-            scopes: ['https://www.googleapis.com/auth/androidpublisher']
+  let options = {
+    uri: finalUrl,
+    jwt: {
+      email: this.options.email,
+      key: this.options.key,
+      scopes: ['https://www.googleapis.com/auth/androidpublisher']
+    }
+  };
+
+  return new Promise(function (resolve, reject) {
+    request(options, function (err, res, body) {
+      let resultInfo = {};
+
+      if (err) {
+        // Google Auth Errors returns here
+        let errBody = err.body;
+        let errorMessage;
+        if (errBody) {
+          errorMessage = err.body.error_description;
+        } else {
+          errorMessage = err;
         }
-    };
+        resultInfo.isSuccessful = false;
+        resultInfo.errorMessage = errorMessage;
 
-    return new Promise(function (resolve, reject) {
-        request(options, function (err, res, body) {
-            let resultInfo = {};
+        reject(resultInfo);
+      } else {
+        let obj = JSON.parse(body);
 
-            if (err) {
-                // Google Auth Errors returns here
-                let errBody = err.body;
-                let errorMessage;
-                if (errBody) {
-                    errorMessage = err.body.error_description;
-                } else {
-                    errorMessage = err;
-                }
-                resultInfo.isSuccessful = false;
-                resultInfo.errorMessage = errorMessage;
+        let statusCode = res.statusCode;
+        //console.log("statusCode: " + statusCode);
 
-                reject(resultInfo);
-            } else {
-                let obj = JSON.parse(body);
+        if (res.statusCode === 200) {
+          // All Good
+          //console.log("All good!");
 
-                let statusCode = res.statusCode;
-                //console.log("statusCode: " + statusCode);
+          resultInfo.isSuccessful = true;
+          resultInfo.errorMessage = null;
 
-                if (res.statusCode === 200) {
-                    // All Good
-                    //console.log("All good!");
+          resultInfo.payload = obj;
 
-                    resultInfo.isSuccessful = true;
-                    resultInfo.errorMessage = null;
+          resolve(resultInfo);
 
-                    resultInfo.payload = obj;
+        } else {
+          // Error
+          let errorMessage = obj.error.message;
 
-                    resolve(resultInfo);
+          resultInfo.isSuccessful = false;
+          resultInfo.errorMessage = errorMessage;
 
-                } else {
-                    // Error
-                    let errorMessage = obj.error.message;
+          //console.log(resultInfo);
+          reject(resultInfo);
+        }
 
-                    resultInfo.isSuccessful = false;
-                    resultInfo.errorMessage = errorMessage;
+      }
+    });
 
-                    //console.log(resultInfo);
-                    reject(resultInfo);
-                }
-
-            }
-        });
-
-    })
+  })
 };
