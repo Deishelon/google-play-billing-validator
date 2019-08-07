@@ -102,6 +102,31 @@ promiseData.then(function(response) {
 })
 ```
 
+##### Acknowledge Purchase / Subscription
+To acknowledge a purchase or a subscription, simple add `developerPayload: <String>` to the `receipt` object
+eg:
+```javascript
+let receipt = {
+  packageName: "<packageName>",
+  productId: "<productId>",
+  purchaseToken: "<purchaseToken>",
+  developerPayload: "YOUR PAYLOAD"
+};
+
+```
+
+If successful, the result will be
+```javascript
+{
+   isSuccessful:true,
+   errorMessage:null,
+   payload:{
+      code:204,
+      message:'Acknowledged Purchase Successfully'
+   }
+}
+```
+
 ##### Successful Response (In-app)
 [
 Purchases.products @ Google Documentation](https://developers.google.com/android-publisher/api-ref/purchases/products#resource)

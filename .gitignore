@@ -84,3 +84,6 @@ typings/
 # IDEA
 .idea/
 google-play-billing-validator.iml
+
+# API Tests
+test/
