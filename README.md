@@ -213,5 +213,5 @@ The migration is very simple:
 
 ### Links
 
-[GitHub](https://github.com/Deishelon/google-play-billing-validator "GitHub")
+[GitHub](https://github.com/Deishelon/google-play-billing-validator "GitHub")  
 [npmjs](https://www.npmjs.com/package/google-play-billing-validator "npmjs")
