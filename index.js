@@ -8,16 +8,40 @@ function Verifier(options) {
 }
 
 Verifier.prototype.verifyINAPP = function (receipt) {
+  this.options.method = 'get';
+  this.options.body = "";
+  this.options.json = false;
+  
   let urlPattern = "https://www.googleapis.com/androidpublisher/v3/applications/%s/purchases/products/%s/tokens/%s";
+  if ("developerPayload" in receipt) {
+    urlPattern += ":acknowledge";
+    this.options.body = {
+      "developerPayload": receipt.developerPayload
+    }
+    this.options.method = 'post';
+    this.options.json = true;
+  }
   let finalUrl = util.format(urlPattern, encodeURIComponent(receipt.packageName), encodeURIComponent(receipt.productId), encodeURIComponent(receipt.purchaseToken));
-
+  
   return this.verify(finalUrl)
 };
 
 Verifier.prototype.verifySub = function (receipt) {
+  this.options.method = 'get';
+  this.options.body = "";
+  this.options.json = false;
+  
   let urlPattern = "https://www.googleapis.com/androidpublisher/v3/applications/%s/purchases/subscriptions/%s/tokens/%s";
+  if ("developerPayload" in receipt) {
+    urlPattern += ":acknowledge";
+    this.options.body = {
+      "developerPayload": receipt.developerPayload
+    }
+    this.options.method = 'post';
+    this.options.json = true;
+  }
   let finalUrl = util.format(urlPattern, encodeURIComponent(receipt.packageName), encodeURIComponent(receipt.productId), encodeURIComponent(receipt.purchaseToken));
-
+  
   return this.verify(finalUrl)
 };
 
@@ -33,12 +57,16 @@ function isValidJson(string) {
 Verifier.prototype.verify = function (finalUrl) {
   let options = {
     uri: finalUrl,
+    method: this.options.method,
+    body: this.options.body,
+    json: this.options.json,
     jwt: {
       email: this.options.email,
       key: this.options.key,
       scopes: ['https://www.googleapis.com/auth/androidpublisher']
     }
   };
+
 
   return new Promise(function (resolve, reject) {
     request(options, function (err, res, body) {
@@ -61,16 +89,22 @@ Verifier.prototype.verify = function (finalUrl) {
 
         let obj = {
           "error": {
-            "code": 404,
-            "message": "Invalid response, please check 'Verifier' configuration"
+            "code": res.statusCode,
+            "message": "Invalid response, please check 'Verifier' configuration or the statusCode above"
           }
         };
+        if (res.statusCode === 204) {
+          obj = {
+            "code": res.statusCode,
+            "message": "Acknowledged Purchase Successfully"
+          };
+        }
 
         if (isValidJson(body)) {
           obj = JSON.parse(body);
         }
 
-        if (res.statusCode === 200) {
+        if (res.statusCode === 200 || res.statusCode === 204) {
           // All Good
 
           resultInfo.isSuccessful = true;
@@ -83,8 +117,10 @@ Verifier.prototype.verify = function (finalUrl) {
         } else {
           // Error
           let errorMessage = obj.error.message;
+          let errorCode = obj.error.code;
 
           resultInfo.isSuccessful = false;
+          resultInfo.errorCode = errorCode;
           resultInfo.errorMessage = errorMessage;
 
           reject(resultInfo);
