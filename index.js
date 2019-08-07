@@ -8,12 +8,13 @@ function Verifier(options) {
 }
 
 Verifier.prototype.verifyINAPP = function (receipt) {
-  let urlPattern = "https://www.googleapis.com/androidpublisher/v3/applications/%s/purchases/products/%s/tokens/%s";
   this.options.method = 'get';
   this.options.body = "";
   this.options.json = false;
-  if (receipt.developerPayload) {
-    urlPattern += ":acknowledge"
+  
+  let urlPattern = "https://www.googleapis.com/androidpublisher/v3/applications/%s/purchases/products/%s/tokens/%s";
+  if ("developerPayload" in receipt) {
+    urlPattern += ":acknowledge";
     this.options.body = {
       "developerPayload": receipt.developerPayload
     }
@@ -21,12 +22,26 @@ Verifier.prototype.verifyINAPP = function (receipt) {
     this.options.json = true;
   }
   let finalUrl = util.format(urlPattern, encodeURIComponent(receipt.packageName), encodeURIComponent(receipt.productId), encodeURIComponent(receipt.purchaseToken));
+  
   return this.verify(finalUrl)
 };
-Verifier.prototype.verifySub = function (receipt) {
-  let urlPattern = "https://www.googleapis.com/androidpublisher/v3/applications/%s/purchases/subscriptions/%s/tokens/%s";
-  let finalUrl = util.format(urlPattern, encodeURIComponent(receipt.packageName), encodeURIComponent(receipt.productId), encodeURIComponent(receipt.purchaseToken));
 
+Verifier.prototype.verifySub = function (receipt) {
+  this.options.method = 'get';
+  this.options.body = "";
+  this.options.json = false;
+  
+  let urlPattern = "https://www.googleapis.com/androidpublisher/v3/applications/%s/purchases/subscriptions/%s/tokens/%s";
+  if ("developerPayload" in receipt) {
+    urlPattern += ":acknowledge";
+    this.options.body = {
+      "developerPayload": receipt.developerPayload
+    }
+    this.options.method = 'post';
+    this.options.json = true;
+  }
+  let finalUrl = util.format(urlPattern, encodeURIComponent(receipt.packageName), encodeURIComponent(receipt.productId), encodeURIComponent(receipt.purchaseToken));
+  
   return this.verify(finalUrl)
 };
 
