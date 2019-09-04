@@ -3,6 +3,7 @@
   "version": "2.0.4",
   "description": "Server side for (Node.js) solution to validate Google Play Purchases and Subscriptions",
   "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
