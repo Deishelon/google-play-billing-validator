@@ -1,6 +1,6 @@
 {
   "name": "google-play-billing-validator",
-  "version": "2.0.4",
+  "version": "2.1.0",
   "description": "Server side for (Node.js) solution to validate Google Play Purchases and Subscriptions",
   "main": "index.js",
   "types": "index.d.ts",
