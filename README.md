@@ -215,3 +215,9 @@ The migration is very simple:
 
 [GitHub](https://github.com/Deishelon/google-play-billing-validator "GitHub")  
 [npmjs](https://www.npmjs.com/package/google-play-billing-validator "npmjs")
+
+
+### Changelog
+
+##### 2.1.0
+- Added TypeScript support
