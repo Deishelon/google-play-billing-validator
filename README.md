@@ -219,5 +219,9 @@ The migration is very simple:
 
 ### Changelog
 
+##### 2.1.1
+- Fixed and improved type script support  
+Thanks [@YogiBear52](https://github.com/YogiBear52)
+
 ##### 2.1.0
 - Added TypeScript support
