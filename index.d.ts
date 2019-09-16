@@ -18,12 +18,30 @@ export interface Response {
   errorMessage: any;
   payload: any;
 }
-export interface Verifier {
-  new (options: Options): any;
 
+export interface VerificationResponse {
+  isSuccessful: boolean;
+  errorMessage: null | string;
+  payload: InAppPurchasePayloadResponse;
+}
+
+export interface InAppPurchasePayloadResponse {
+  kind: "androidpublisher#productPurchase";
+  purchaseTimeMillis: number;
+  acknowledgementState: number;
+  purchaseState: number;
+  consumptionState: number;
+  developerPayload: number;
+  orderId: string;
+  purchaseType: number;
+}
+
+export interface IVerifier {
   verifyINAPP(receipt: Receipt): Promise<any>;
   verifySub(receipt: Receipt): Promise<any>;
 }
-export const Verifier: {
-  new (options: Options): Verifier;
+declare const Verifier: {
+  new (options: Options): IVerifier;
 };
+
+export default Verifier;
