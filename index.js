@@ -3,6 +3,9 @@ const util = require('util');
 
 module.exports = Verifier;
 
+// Allow default import syntax from TypeScript
+module.exports.default = Verifier;
+
 function Verifier(options) {
   this.options = options || {};
 }
