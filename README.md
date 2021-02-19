@@ -219,7 +219,7 @@ The migration is very simple:
 
 ### Changelog
 
-##### 2.1.2
+##### 2.1.3
 - Allow default import syntax from TypeScript
 Thanks [@unpollito](https://github.com/unpollito)
 
