@@ -219,6 +219,10 @@ The migration is very simple:
 
 ### Changelog
 
+##### 2.1.2
+- Allow default import syntax from TypeScript
+Thanks [@unpollito](https://github.com/unpollito)
+
 ##### 2.1.1
 - Fixed and improved type script support  
 Thanks [@YogiBear52](https://github.com/YogiBear52)
