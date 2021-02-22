@@ -22,7 +22,7 @@ npm i google-play-billing-validator
 4.  Link your Google Cloud Project to your developer account (If you have not created one yet, go to [Google API Console](https://console.developers.google.com/iam-admin/projects "API Console") and create one then come back here and link it )
 5.  In Google API Console, in the left side menu click on service account
 6.  Then create a service account (Don't forget to save private key)
-7.  Go back to Developer Console, and grand asses to the newly created account (the permission has to be **View financial data**)
+7.  Go back to Developer Console, and grant access to the newly created account (the permission has to be **View financial data**)
 8.  All done
 
 ## Usage
