@@ -29,12 +29,14 @@ Verifier.prototype.verifyINAPP = function (receipt) {
   return this.verify(finalUrl)
 };
 
-Verifier.prototype.verifySub = function (receipt) {
+Verifier.prototype.verifySub = function (receipt, v2 = false) {
   this.options.method = 'get';
   this.options.body = "";
   this.options.json = false;
   
-  let urlPattern = "https://www.googleapis.com/androidpublisher/v3/applications/%s/purchases/subscriptions/%s/tokens/%s";
+  let urlPattern = v2
+    ? "https://androidpublisher.googleapis.com/androidpublisher/v3/applications/%s/purchases/subscriptionsv2/tokens/%s"
+    : "https://www.googleapis.com/androidpublisher/v3/applications/%s/purchases/subscriptions/%s/tokens/%s";
   if ("developerPayload" in receipt) {
     urlPattern += ":acknowledge";
     this.options.body = {
@@ -43,7 +45,9 @@ Verifier.prototype.verifySub = function (receipt) {
     this.options.method = 'post';
     this.options.json = true;
   }
-  let finalUrl = util.format(urlPattern, encodeURIComponent(receipt.packageName), encodeURIComponent(receipt.productId), encodeURIComponent(receipt.purchaseToken));
+  let finalUrl = v2
+    ? util.format(urlPattern, encodeURIComponent(receipt.packageName), encodeURIComponent(receipt.purchaseToken))
+    : util.format(urlPattern, encodeURIComponent(receipt.packageName), encodeURIComponent(receipt.productId), encodeURIComponent(receipt.purchaseToken));
   
   return this.verify(finalUrl)
 };

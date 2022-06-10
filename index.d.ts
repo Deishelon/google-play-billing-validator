@@ -38,7 +38,7 @@ export interface InAppPurchasePayloadResponse {
 
 export interface IVerifier {
   verifyINAPP(receipt: Receipt): Promise<any>;
-  verifySub(receipt: Receipt): Promise<any>;
+  verifySub(receipt: Receipt, v2?: boolean): Promise<any>;
 }
 declare const Verifier: {
   new (options: Options): IVerifier;
