@@ -102,6 +102,19 @@ promiseData.then(function(response) {
 })
 ```
 
+##### Validate Subscription v2
+
+Subscription can be validated with the v2 API, that does not require `productId`.
+Second parameter to `verifySub` (boolean) should be set to `true`.
+
+```javascript
+let receipt = {
+    packageName: "your app package name",
+    purchaseToken: "purchase token"
+};
+let promiseData = verifier.verifySub(receipt, true)
+```
+
 ##### Acknowledge Purchase / Subscription
 To acknowledge a purchase or a subscription, simple add `developerPayload: <String>` to the `receipt` object
 eg:
